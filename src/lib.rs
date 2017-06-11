@@ -54,7 +54,7 @@ pub fn read_le_to_i32<R: Read>(reader: &mut R) -> i32 {
     #[cfg(target_endian = "big")]
     temp.reverse();
     unsafe {
-        transmute::<[u8; 4], i32>(test);
+        transmute::<[u8; 4], i32>(temp)
     }
 }
 
@@ -64,7 +64,7 @@ pub fn read_be_to_i32<R: Read>(reader: &mut R) -> i32 {
     #[cfg(target_endian = "little")]
     temp.reverse();
     unsafe {
-        transmute::<[u8; 4], i32>(test);
+        transmute::<[u8; 4], i32>(temp)
     }
 }
 
