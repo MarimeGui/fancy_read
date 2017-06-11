@@ -1,32 +1,68 @@
 use std::io::Read;
 use std::mem::transmute;
 
+
 pub fn read_to_u8<R: Read>(reader: &mut R) -> u8 {
     let mut temp: [u8; 1] = [0];
     reader.read_exact(&mut temp[..]).expect("Failed to read");
     temp[0]
 }
 
-pub fn read_to_u16<R: Read>(reader: &mut R) -> u16 {
-    let mut temp: [u8; 4] = [0; 2];
+pub fn read_le_to_u16<R: Read>(reader: &mut R) -> u16 {
+    let mut temp: [u8; 2] = [0; 2];
     reader.read_exact(&mut temp[..]).expect("Failed to read");
+    #[cfg(target_endian = "big")]
+    temp.reverse();
     unsafe {
-        transmute::<[u8; 4], u16>(temp)
+        transmute::<[u8; 2], u16>(temp)
     }
 }
 
-pub fn read_to_u32_inv<R: Read>(reader: &mut R) -> u32 {
+pub fn read_be_to_u16<R: Read>(reader: &mut R) -> u16 {
+    let mut temp: [u8; 2] = [0; 2];
+    reader.read_exact(&mut temp[..]).expect("Failed to read");
+    #[cfg(target_endian = "little")]
+    temp.reverse();
+    unsafe {
+        transmute::<[u8; 2], u16>(temp)
+    }
+}
+
+pub fn read_le_to_u32<R: Read>(reader: &mut R) -> u32 {
     let mut temp: [u8; 4] = [0; 4];
     reader.read_exact(&mut temp[..]).expect("Failed to read");
-    let temp: [u8; 4] = [temp[3], temp[2], temp[1], temp[0]];
+    #[cfg(target_endian = "big")]
+    temp.reverse();
     unsafe {
         transmute::<[u8; 4], u32>(temp)
     }
 }
 
-pub fn read_to_i32<R: Read>(reader: &mut R) -> i32 {
+pub fn read_be_to_u32<R: Read>(reader: &mut R) -> u32 {
     let mut temp: [u8; 4] = [0; 4];
     reader.read_exact(&mut temp[..]).expect("Failed to read");
+    #[cfg(target_endian = "little")]
+    temp.reverse();
+    unsafe {
+        transmute::<[u8; 4], u32>(temp)
+    }
+}
+
+pub fn read_le_to_i32<R: Read>(reader: &mut R) -> i32 {
+    let mut temp: [u8; 4] = [0; 4];
+    reader.read_exact(&mut temp[..]).expect("Failed to read");
+    #[cfg(target_endian = "big")]
+    temp.reverse();
+    unsafe {
+        transmute::<[u8; 4], i32>(test);
+    }
+}
+
+pub fn read_be_to_i32<R: Read>(reader: &mut R) -> i32 {
+    let mut temp: [u8; 4] = [0; 4];
+    reader.read_exact(&mut temp[..]).expect("Failed to read");
+    #[cfg(target_endian = "little")]
+    temp.reverse();
     unsafe {
         transmute::<[u8; 4], i32>(test);
     }
