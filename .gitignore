@@ -1,0 +1,5 @@
+target/
+.idea/
+**/*.rs.bk
+fancy_read.iml
+Cargo.lock
