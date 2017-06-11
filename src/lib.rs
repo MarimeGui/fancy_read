@@ -1,16 +1,39 @@
 use std::io::Read;
+use std::mem::transmute;
 
-fn read_to_u32_le<T: Read>(reader: &mut T) -> u32 {
-    let mut temp_read: [u8; 4] = [0; 4];
-    reader.read_exact(&mut temp_read[..]).expect("Failed to read");
-    let temp: [u8; 4] = [temp_read[3], temp_read[2], temp_read[1], temp_read[0]];
-    unsafe {
-        mem::transmute(temp)
-    }
-}
-
-fn read_to_u8<T: Read>(reader: &mut T) -> u8 {
+pub fn read_to_u8<R: Read>(reader: &mut R) -> u8 {
     let mut temp: [u8; 1] = [0];
     reader.read_exact(&mut temp[..]).expect("Failed to read");
     temp[0]
+}
+
+pub fn read_to_u16<R: Read>(reader: &mut R) -> u16 {
+    let mut temp: [u8; 4] = [0; 2];
+    reader.read_exact(&mut temp[..]).expect("Failed to read");
+    unsafe {
+        transmute::<[u8; 4], u16>(temp)
+    }
+}
+
+pub fn read_to_u32_inv<R: Read>(reader: &mut R) -> u32 {
+    let mut temp: [u8; 4] = [0; 4];
+    reader.read_exact(&mut temp[..]).expect("Failed to read");
+    let temp: [u8; 4] = [temp[3], temp[2], temp[1], temp[0]];
+    unsafe {
+        transmute::<[u8; 4], u32>(temp)
+    }
+}
+
+pub fn read_to_i32<R: Read>(reader: &mut R) -> i32 {
+    let mut temp: [u8; 4] = [0; 4];
+    reader.read_exact(&mut temp[..]).expect("Failed to read");
+    unsafe {
+        transmute::<[u8; 4], i32>(test);
+    }
+}
+
+pub fn read_to_string<R: Read>(reader: &mut R, length: u32) -> String {
+    let mut temp = String::with_capacity(length as usize);
+    reader.read_to_string(&mut temp);
+    temp
 }
