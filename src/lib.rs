@@ -67,9 +67,3 @@ pub fn read_be_to_i32<R: Read>(reader: &mut R) -> i32 {
         transmute::<[u8; 4], i32>(temp)
     }
 }
-
-pub fn read_to_string<R: Read>(reader: &mut R, length: u32) -> String {
-    let mut temp = String::with_capacity(length as usize);
-    reader.read_to_string(&mut temp);
-    temp
-}
